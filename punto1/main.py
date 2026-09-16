@@ -1,32 +1,41 @@
-# main.py
-
 import sys
 from antlr4 import InputStream, FileStream, CommonTokenStream
+from antlr4.error.ErrorListener import ErrorListener
 from ExprLexer import ExprLexer
 from ExprParser import ExprParser
-from ExprEvalVisitor import ExprEvalVisitor
+
+
+class ContadorErrores(ErrorListener):
+    def __init__(self):
+        super().__init__()
+        self.errores = 0
+
+    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        self.errores += 1
+        print(f"  Error sintáctico en línea {line}, columna {column}: {msg}")
 
 
 def procesar(entrada_stream, etiqueta):
     lexer = ExprLexer(entrada_stream)
     tokens = CommonTokenStream(lexer)
     parser = ExprParser(tokens)
-    arbol = parser.prog()
 
-    print(f"'{etiqueta}'")
-    print(f"  Árbol : {arbol.toStringTree(recog=parser)}")
+    # Reemplazar el listener por defecto con nuestro contador
+    parser.removeErrorListeners()
+    listener = ContadorErrores()
+    parser.addErrorListener(listener)
 
-    try:
-        visitor = ExprEvalVisitor()
-        resultado = visitor.visit(arbol)
-        print(f"  Valor : {resultado}")
-    except ValueError as e:
-        print(f"  Valor : ERROR - {e}")
+    parser.prog()
+
+    if listener.errores == 0:
+        print(f"  ACEPTADA: '{etiqueta}'")
+    else:
+        print(f"  RECHAZADA: '{etiqueta}' ({listener.errores} error(es))")
 
 
 def main():
     if len(sys.argv) < 2:
-        texto = input(" ")
+        texto = input("Ingrese la expresión: ")
         entrada = InputStream(texto)
         procesar(entrada, texto)
     elif sys.argv[1] == '-f':
