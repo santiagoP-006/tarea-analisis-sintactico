@@ -35,24 +35,6 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#RestaExpr.
-    def enterRestaExpr(self, ctx:ExprParser.RestaExprContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#RestaExpr.
-    def exitRestaExpr(self, ctx:ExprParser.RestaExprContext):
-        pass
-
-
-    # Enter a parse tree produced by ExprParser#MultiplicacionExplicita.
-    def enterMultiplicacionExplicita(self, ctx:ExprParser.MultiplicacionExplicitaContext):
-        pass
-
-    # Exit a parse tree produced by ExprParser#MultiplicacionExplicita.
-    def exitMultiplicacionExplicita(self, ctx:ExprParser.MultiplicacionExplicitaContext):
-        pass
-
-
     # Enter a parse tree produced by ExprParser#FactorComoTermino.
     def enterFactorComoTermino(self, ctx:ExprParser.FactorComoTerminoContext):
         pass
@@ -62,12 +44,12 @@ class ExprListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by ExprParser#MultiplicacionImplicita.
-    def enterMultiplicacionImplicita(self, ctx:ExprParser.MultiplicacionImplicitaContext):
+    # Enter a parse tree produced by ExprParser#Multiplicacion.
+    def enterMultiplicacion(self, ctx:ExprParser.MultiplicacionContext):
         pass
 
-    # Exit a parse tree produced by ExprParser#MultiplicacionImplicita.
-    def exitMultiplicacionImplicita(self, ctx:ExprParser.MultiplicacionImplicitaContext):
+    # Exit a parse tree produced by ExprParser#Multiplicacion.
+    def exitMultiplicacion(self, ctx:ExprParser.MultiplicacionContext):
         pass
 
 
