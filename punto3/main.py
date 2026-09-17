@@ -34,7 +34,7 @@ def procesar(entrada_stream, etiqueta):
     parser.prog()
 
     if contador.errores == 0:
-        print(f"  ACEPTADA (con posible ambigüedad resuelta por ANTLR): '{etiqueta}'")
+        print(f"  ACEPTADA (ambigüedad resuelta por ANTLR): '{etiqueta}'")
     else:
         print(f"  RECHAZADA: '{etiqueta}' ({contador.errores} error(es))")
 
