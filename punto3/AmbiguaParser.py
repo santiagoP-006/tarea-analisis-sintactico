@@ -78,12 +78,6 @@ class AmbiguaParser ( Parser ):
             if hasattr( listener, "exitProg" ):
                 listener.exitProg(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitProg" ):
-                return visitor.visitProg(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -139,12 +133,6 @@ class AmbiguaParser ( Parser ):
             if hasattr( listener, "exitNumAmbigua" ):
                 listener.exitNumAmbigua(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitNumAmbigua" ):
-                return visitor.visitNumAmbigua(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class SumaAmbiguaContext(EContext):
 
@@ -167,12 +155,6 @@ class AmbiguaParser ( Parser ):
             if hasattr( listener, "exitSumaAmbigua" ):
                 listener.exitSumaAmbigua(self)
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitSumaAmbigua" ):
-                return visitor.visitSumaAmbigua(self)
-            else:
-                return visitor.visitChildren(self)
-
 
     class MultAmbiguaContext(EContext):
 
@@ -194,12 +176,6 @@ class AmbiguaParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitMultAmbigua" ):
                 listener.exitMultAmbigua(self)
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitMultAmbigua" ):
-                return visitor.visitMultAmbigua(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 

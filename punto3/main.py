@@ -1,27 +1,47 @@
 import sys
 from antlr4 import InputStream, FileStream, CommonTokenStream
+from antlr4.error.ErrorListener import ErrorListener
+from antlr4.error.DiagnosticErrorListener import DiagnosticErrorListener
+from antlr4 import PredictionMode
 from AmbiguaLexer import AmbiguaLexer
 from AmbiguaParser import AmbiguaParser
-from AmbiguaEvalVisitor import AmbiguaEvalVisitor
+
+
+class ContadorErrores(ErrorListener):
+    def __init__(self):
+        super().__init__()
+        self.errores = 0
+
+    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+        self.errores += 1
+        print(f"  Error sintáctico en línea {line}, columna {column}: {msg}")
 
 
 def procesar(entrada_stream, etiqueta):
     lexer = AmbiguaLexer(entrada_stream)
     tokens = CommonTokenStream(lexer)
     parser = AmbiguaParser(tokens)
-    arbol = parser.prog()
 
-    print(f"'{etiqueta}'")
-    print(f"  Árbol : {arbol.toStringTree(recog=parser)}")
+    # Reemplaza el listener por defecto y agrega el diagnóstico de ambigüedad
+    parser.removeErrorListeners()
+    contador = ContadorErrores()
+    parser.addErrorListener(contador)
+    parser.addErrorListener(DiagnosticErrorListener())
 
-    visitor = AmbiguaEvalVisitor()
-    resultado = visitor.visit(arbol)
-    print(f"  Valor : {resultado}")
+    # Modo de predicción que detecta y reporta ambigüedades exactas
+    parser._interp.predictionMode = PredictionMode.LL_EXACT_AMBIG_DETECTION
+
+    parser.prog()
+
+    if contador.errores == 0:
+        print(f"  ACEPTADA (con posible ambigüedad resuelta por ANTLR): '{etiqueta}'")
+    else:
+        print(f"  RECHAZADA: '{etiqueta}' ({contador.errores} error(es))")
 
 
 def main():
     if len(sys.argv) < 2:
-        texto = input(" ")
+        texto = input("Ingrese la expresión: ")
         entrada = InputStream(texto)
         procesar(entrada, texto)
     elif sys.argv[1] == '-f':
